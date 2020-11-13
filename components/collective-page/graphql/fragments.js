@@ -47,3 +47,27 @@ export const contributorsFieldsFragment = gql`
     collectiveId
   }
 `;
+
+/**
+ * Fields fetched for all possible features
+ */
+export const collectiveNavbarFieldsFragment = gql`
+  fragment NavbarFields on CollectiveFeatures {
+    CONTRIBUTE
+    CONTRIBUTIONS
+    RECURRING_CONTRIBUTIONS
+    EVENTS
+    PROJECTS
+    BUDGET
+    TRANSACTIONS
+    EXPENSES
+    COLLECTIVE_GOALS
+    TOP_FINANCIAL_CONTRIBUTORS
+    ALL_FINANCIAL_CONTRIBUTORS
+    CONNECT
+    CONVERSATIONS
+    UPDATES
+    ABOUT
+    TEAM
+  }
+`;
