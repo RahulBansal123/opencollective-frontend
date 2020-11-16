@@ -4,7 +4,7 @@ import { throttle } from 'lodash';
 import memoizeOne from 'memoize-one';
 import { FormattedMessage } from 'react-intl';
 
-import { getFilteredSectionsForCollective } from '../../lib/collective-sections';
+import { getFilteredSectionsForCollective, getNavbarSectionsForCollective } from '../../lib/collective-sections';
 import { CollectiveType } from '../../lib/constants/collectives';
 
 import CollectiveNavbar from '../CollectiveNavbar';
@@ -91,6 +91,10 @@ class CollectivePage extends Component {
 
   getSections = memoizeOne((collective, isAdmin, isHostAdmin) => {
     return getFilteredSectionsForCollective(collective, isAdmin, isHostAdmin);
+  });
+
+  getNavbarSections = memoizeOne(collective => {
+    return getNavbarSectionsForCollective(collective);
   });
 
   onScroll = throttle(() => {
@@ -297,6 +301,7 @@ class CollectivePage extends Component {
     const { type, isHost, canApply, canContact, isActive, settings } = collective;
     const { isFixed, selectedSection, notification } = this.state;
     const sections = this.getSections(this.props.collective, this.props.isAdmin, this.props.isHostAdmin);
+    const navbarSections = this.getNavbarSections(this.props.collective);
     const isFund = collective.type === CollectiveType.FUND || settings?.fund === true; // Funds MVP, to refactor
     const isAuthenticated = LoggedInUser ? true : false;
     const callsToAction = this.getCallsToAction(
@@ -352,6 +357,7 @@ class CollectivePage extends Component {
           <CollectiveNavbar
             collective={collective}
             sections={sections}
+            navbarSections={navbarSections}
             isAdmin={isAdmin}
             selected={selectedSection || sections[0]}
             onCollectiveClick={this.onCollectiveClick}

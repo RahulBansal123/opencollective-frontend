@@ -50,7 +50,8 @@ export const Sections = {
   USE_EXPENSES: 'expenses',
   GOALS: 'goals', // COLLECTIVE_GOALS
   PARTICIPANTS: 'participants',
-  CONTRIBUTORS: 'contributors', // TOP_FINANCIAL_CONTRIBUTORS and ALL_FINANCIAL_CONTRIBUTORS
+  ALL_FINANCIAL_CONTRIBUTORS: 'contributors',
+  CONTRIBUTORS: 'contributors', // legacy, will turn into ALL_FINANCIAL_CONTRIBUTORS
   // 4. CONNECT
   CONNECT: 'connect',
   UPDATES: 'updates',
@@ -62,7 +63,7 @@ export const Sections = {
   LOCATION: 'location',
 };
 
-export const MainSections = {
+export const NavbarSections = {
   // 1. CONTRIBUTE
   CONTRIBUTE: 'contribute',
   CONTRIBUTIONS: 'contributions',
@@ -73,7 +74,6 @@ export const MainSections = {
   BUDGET: 'budget',
   TRANSACTIONS: 'transactions',
   PARTICIPANTS: 'participants',
-  CONTRIBUTORS: 'contributors', // TOP_FINANCIAL_CONTRIBUTORS and ALL_FINANCIAL_CONTRIBUTORS
   // 4. CONNECT
   CONNECT: 'connect',
   // 5. ABOUT
@@ -84,5 +84,5 @@ export const MainSections = {
 
 /** A list of all section names */
 export const AllSectionsNames = Object.values(Sections);
-export const MainSectionsNames = Object.values(MainSections);
-export const MainSectionsKeys = Object.keys(MainSections);
+export const NavbarSectionsNames = Object.values(NavbarSections);
+export const NavbarSectionsKeys = Object.keys(NavbarSections);

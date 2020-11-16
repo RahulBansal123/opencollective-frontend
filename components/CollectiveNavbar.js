@@ -12,7 +12,7 @@ import { getEnvVar } from '../lib/env-utils';
 import i18nCollectivePageSection from '../lib/i18n-collective-page-section';
 import { parseToBoolean } from '../lib/utils';
 
-import { AllSectionsNames, Dimensions, MainSectionsNames } from './collective-page/_constants';
+import { AllSectionsNames, Dimensions, NavbarSectionsNames } from './collective-page/_constants';
 import Avatar from './Avatar';
 import CollectiveCallsToAction from './CollectiveCallsToAction';
 import CollectiveNavbarActionsMenu from './CollectiveNavbarActionsMenu';
@@ -191,6 +191,7 @@ const CollectiveNavbar = ({
   isLoading,
   showEdit,
   sections,
+  navbarSections,
   selected,
   LinkComponent,
   callsToAction,
@@ -203,7 +204,8 @@ const CollectiveNavbar = ({
   intl,
 }) => {
   const [isExpended, setExpended] = React.useState(false);
-  sections = sections || getFilteredSectionsForCollective(collective, isAdmin);
+  // use navbar sections if available through feature flag
+  sections = navbarSections || sections || getFilteredSectionsForCollective(collective);
   callsToAction = { ...getDefaultCallsToactions(collective, isAdmin), ...callsToAction };
 
   return (
@@ -370,10 +372,12 @@ CollectiveNavbar.propTypes = {
   LinkComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   /** The list of sections to be displayed by the NavBar. If not provided, will show all the sections available to this collective type. */
   sections: PropTypes.arrayOf(PropTypes.oneOf(AllSectionsNames)),
+  /** The list of sections to be displayed by the NavBar. If not provided, will show all the sections available to this collective type. */
+  navbarSections: PropTypes.arrayOf(PropTypes.oneOf(NavbarSectionsNames)),
   /** Called when users click the collective logo or name */
   onCollectiveClick: PropTypes.func,
   /** Currently selected section */
-  selected: PropTypes.oneOf(AllSectionsNames),
+  selected: PropTypes.oneOf(NavbarSectionsNames),
   /** If true, the collective infos (avatar + name) will be hidden with css `visibility` */
   hideInfos: PropTypes.bool,
   /** If true, the CTAs will be hidden on mobile */
@@ -387,8 +391,6 @@ CollectiveNavbar.propTypes = {
   /** @ignore From injectIntl */
   intl: PropTypes.object,
   createNotification: PropTypes.func,
-  /** The list of sections to be displayed by the NavBar. If not provided, will show all the sections available to this collective type. */
-  mainSections: PropTypes.arrayOf(PropTypes.oneOf(MainSectionsNames)),
 };
 
 CollectiveNavbar.defaultProps = {
