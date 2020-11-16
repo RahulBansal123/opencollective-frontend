@@ -12,7 +12,7 @@ import { getEnvVar } from '../lib/env-utils';
 import i18nCollectivePageSection from '../lib/i18n-collective-page-section';
 import { parseToBoolean } from '../lib/utils';
 
-import { AllSectionsNames, Dimensions } from './collective-page/_constants';
+import { AllSectionsNames, Dimensions, MainSectionsNames } from './collective-page/_constants';
 import Avatar from './Avatar';
 import CollectiveCallsToAction from './CollectiveCallsToAction';
 import CollectiveNavbarActionsMenu from './CollectiveNavbarActionsMenu';
@@ -387,6 +387,8 @@ CollectiveNavbar.propTypes = {
   /** @ignore From injectIntl */
   intl: PropTypes.object,
   createNotification: PropTypes.func,
+  /** The list of sections to be displayed by the NavBar. If not provided, will show all the sections available to this collective type. */
+  mainSections: PropTypes.arrayOf(PropTypes.oneOf(MainSectionsNames)),
 };
 
 CollectiveNavbar.defaultProps = {
