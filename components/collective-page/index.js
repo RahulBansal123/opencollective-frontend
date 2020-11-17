@@ -115,7 +115,9 @@ class CollectivePage extends Component {
     // Get the currently section that is at the top of the screen.
     const distanceThreshold = 200;
     const breakpoint = window.scrollY + distanceThreshold;
-    const sections = this.getSections(this.props.collective, this.props.isAdmin, this.props.isHostAdmin);
+    let sections = this.getSections(this.props.collective, this.props.isAdmin, this.props.isHostAdmin);
+    const navbarSections = this.getNavbarSections(this.props.collective);
+    sections = navbarSections || sections;
     for (let i = sections.length - 1; i >= 0; i--) {
       const sectionName = sections[i];
       const sectionRef = this.sectionsRefs[sectionName];
@@ -180,7 +182,15 @@ class CollectivePage extends Component {
             stats={this.props.stats}
             section={section}
             financialContributors={this.props.financialContributors}
+          />
+        );
+      case Sections.CONTRIBUTORS:
+        return (
+          <SectionContributors
+            collective={this.props.collective}
+            financialContributors={this.props.financialContributors}
             coreContributors={this.props.coreContributors}
+            stats={this.props.stats}
           />
         );
       case Sections.CONTRIBUTE:
@@ -197,27 +207,15 @@ class CollectivePage extends Component {
             section={section}
           />
         );
-      case Sections.CONTRIBUTORS:
-        return (
-          <SectionContributors
-            collective={this.props.collective}
-            financialContributors={this.props.financialContributors}
-            coreContributors={this.props.coreContributors}
-            stats={this.props.stats}
-          />
-        );
-      case Sections.UPDATES:
-        return (
-          <SectionUpdates
-            collective={this.props.collective}
-            isAdmin={this.props.isAdmin}
-            isLoggedIn={Boolean(this.props.LoggedInUser)}
-          />
-        );
       case Sections.CONTRIBUTIONS:
-        return <SectionContributions collective={this.props.collective} />;
-      case Sections.CONVERSATIONS:
-        return <SectionConversations collective={this.props.collective} conversations={this.props.conversations} />;
+        return (
+          <SectionContributions
+            collective={this.props.collective}
+            slug={this.props.collective.slug}
+            LoggedInUser={this.props.LoggedInUser}
+            section={section}
+          />
+        );
       case Sections.TRANSACTIONS:
         return (
           <SectionTransactions
@@ -226,8 +224,6 @@ class CollectivePage extends Component {
             isRoot={this.props.isRoot}
           />
         );
-      case Sections.GOALS:
-        return <SectionGoals collective={this.props.collective} />;
       case Sections.TICKETS:
         return (
           <SectionTickets
@@ -247,10 +243,6 @@ class CollectivePage extends Component {
         );
       case Sections.LOCATION:
         return <SectionLocation collective={this.props.collective} />;
-      case Sections.RECURRING_CONTRIBUTIONS:
-        return (
-          <SectionRecurringContributions slug={this.props.collective.slug} LoggedInUser={this.props.LoggedInUser} />
-        );
       case Sections.PROJECTS:
         return (
           <SectionProjects
@@ -278,6 +270,23 @@ class CollectivePage extends Component {
             isAdmin={this.props.isAdmin}
             section={section}
           />
+        );
+      // v2 transition - these standalone sections will be removed from render if feature flag is active
+      case Sections.UPDATES:
+        return (
+          <SectionUpdates
+            collective={this.props.collective}
+            isAdmin={this.props.isAdmin}
+            isLoggedIn={Boolean(this.props.LoggedInUser)}
+          />
+        );
+      case Sections.CONVERSATIONS:
+        return <SectionConversations collective={this.props.collective} conversations={this.props.conversations} />;
+      case Sections.GOALS:
+        return <SectionGoals collective={this.props.collective} />;
+      case Sections.RECURRING_CONTRIBUTIONS:
+        return (
+          <SectionRecurringContributions slug={this.props.collective.slug} LoggedInUser={this.props.LoggedInUser} />
         );
       default:
         return null;

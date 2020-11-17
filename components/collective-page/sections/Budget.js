@@ -14,17 +14,14 @@ import { GraphQLContext } from '../../../lib/graphql/context';
 import { API_V2_CONTEXT, gqlV2 } from '../../../lib/graphql/helpers';
 import { parseToBoolean } from '../../../lib/utils';
 
-import { Dimensions } from '../_constants';
 import Container from '../../Container';
-import * as ContributorsFilter from '../../ContributorsFilter';
-import ContributorsGrid, { COLLECTIVE_CARD_MARGIN_X } from '../../ContributorsGrid';
 import DefinedTerm, { Terms } from '../../DefinedTerm';
 import { Box, Flex } from '../../Grid';
 import Link from '../../Link';
 import MessageBox from '../../MessageBox';
 import StyledButton from '../../StyledButton';
 import StyledCard from '../../StyledCard';
-import { H3, H4, P, Span } from '../../Text';
+import { H4, P, Span } from '../../Text';
 import { transactionsQueryCollectionFragment } from '../../transactions/graphql/fragments';
 import TransactionsList from '../../transactions/TransactionsList';
 import { withUser } from '../../UserProvider';
@@ -48,31 +45,11 @@ export const getBudgetSectionQueryVariables = slug => {
   return { slug, limit: 3 };
 };
 
-const getContributorsFilters = memoizeOne((coreContributors, financialContributors) => {
-  if (financialContributors.length && coreContributors.length) {
-    return ContributorsFilter.FILTERS_LIST;
-  } else {
-    return [];
-  }
-});
-
-const filterContributors = memoizeOne((coreContributors, financialContributors, filter) => {
-  // Return the proper list
-  if (filter === ContributorsFilter.CONTRIBUTOR_FILTERS.CORE) {
-    return coreContributors;
-  } else if (filter === ContributorsFilter.CONTRIBUTOR_FILTERS.FINANCIAL) {
-    return financialContributors;
-  } else {
-    const coreContributorsIds = new Set(coreContributors.map(c => c.id));
-    return [...coreContributors, ...financialContributors.filter(c => !coreContributorsIds.has(c.id))];
-  }
-});
-
 /**
  * The budget section. Shows the expenses, the latests transactions and some statistics
  * abut the global budget of the collective.
  */
-const SectionBudget = ({ collective, stats, financialContributors, LoggedInUser, coreContributors, section }) => {
+const SectionBudget = ({ collective, stats, financialContributors, LoggedInUser, section }) => {
   const budgetQueryResult = useQuery(budgetSectionQuery, {
     variables: getBudgetSectionQueryVariables(collective.slug),
     context: API_V2_CONTEXT,
@@ -88,13 +65,6 @@ const SectionBudget = ({ collective, stats, financialContributors, LoggedInUser,
   React.useEffect(() => {
     refetch();
   }, [LoggedInUser]);
-  // contributors
-  const [filter, setFilter] = React.useState(ContributorsFilter.CONTRIBUTOR_FILTERS.ALL);
-  const onlyShowCore = collective.type === CollectiveType.ORGANIZATION;
-  const activeFilter = onlyShowCore ? ContributorsFilter.CONTRIBUTOR_FILTERS.CORE : filter;
-  const filters = getContributorsFilters(coreContributors, financialContributors);
-  const contributors = filterContributors(coreContributors, financialContributors, activeFilter);
-  const hasFilters = !onlyShowCore && filters.length > 1;
 
   const renderNewSubsections = () => {
     if (parseToBoolean(getEnvVar('NEW_COLLECTIVE_NAVBAR'))) {
@@ -118,78 +88,6 @@ const SectionBudget = ({ collective, stats, financialContributors, LoggedInUser,
               </Container>
             </TopContributorsContainer>
           )}
-          <ContainerSectionContent px={4} py={5} mt={3}>
-            {!onlyShowCore ? (
-              <React.Fragment>
-                <H4 fontWeight="500" color="black.900" mb={3}>
-                  <FormattedMessage
-                    id="CollectivePage.AllOfUs"
-                    defaultMessage="{collectiveName} is all of us"
-                    values={{ collectiveName: collective.name }}
-                  />
-                </H4>
-                <H3 mb={3} fontWeight="500" fontSize="20px" color="black.700">
-                  <FormattedMessage
-                    id="CollectivePage.OurContributors"
-                    defaultMessage="Our contributors {count}"
-                    values={{
-                      count: (
-                        <Span color="black.400" fontSize="28px">
-                          {stats.backers.all + coreContributors.length}
-                        </Span>
-                      ),
-                    }}
-                  />
-                </H3>
-                <P color="black.600">
-                  <FormattedMessage
-                    id="CollectivePage.ContributorsDescription"
-                    defaultMessage="Everyone who has supported {collectiveName}. Individuals and organizations that believe in –and take ownership of– our purpose."
-                    values={{ collectiveName: collective.name }}
-                  />
-                </P>
-              </React.Fragment>
-            ) : (
-              <H4 fontWeight="500" color="black.900" mb={3}>
-                <FormattedMessage id="ContributorsFilter.Core" defaultMessage="Team" />
-              </H4>
-            )}
-          </ContainerSectionContent>
-          {hasFilters && (
-            <Container maxWidth={Dimensions.MAX_SECTION_WIDTH} margin="0 auto">
-              <ContributorsFilter.default
-                selected={filter}
-                onChange={setFilter}
-                filters={filters}
-                selectedButtonStyle="primary"
-                px={Dimensions.PADDING_X}
-              />
-            </Container>
-          )}
-          <ContributorsGrid
-            contributors={contributors}
-            collectiveId={collective.id}
-            currency={collective.currency}
-            getPaddingLeft={({ width, rowWidth, nbRows }) => {
-              if (width < Dimensions.MAX_SECTION_WIDTH) {
-                // No need for padding on screens small enough so they don't have padding
-                return 0;
-              } else if (nbRows > 1) {
-                if (rowWidth <= width) {
-                  // If multiline and possible center contributors cards
-                  const cardsLeftOffset = COLLECTIVE_CARD_MARGIN_X / 2;
-                  return (width - rowWidth) / 2 - cardsLeftOffset;
-                } else {
-                  // Otherwise if multiline and the grid is full, just use the full screen
-                  return 0;
-                }
-              } else {
-                // Otherwise add a normal section padding on the left
-                const cardsLeftOffset = COLLECTIVE_CARD_MARGIN_X / 2;
-                return (width - Math.max(Dimensions.MAX_SECTION_WIDTH, rowWidth)) / 2 - cardsLeftOffset;
-              }
-            }}
-          />
         </React.Fragment>
       );
     } else {
@@ -343,7 +241,7 @@ SectionBudget.propTypes = {
     totalAmountReceived: PropTypes.number,
   }),
 
-  contributors: PropTypes.arrayOf(
+  financialContributors: PropTypes.arrayOf(
     PropTypes.shape({
       type: PropTypes.oneOf(Object.values(CollectiveType)).isRequired,
       isBacker: PropTypes.bool,

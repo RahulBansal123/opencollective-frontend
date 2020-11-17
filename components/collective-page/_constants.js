@@ -13,28 +13,6 @@ export const AnimationsDurations = {
   HERO_COLLAPSE: 150,
 };
 
-/**
- * A map of unique identifiers for the sections of the page
- */
-// export const Sections = {
-//   GOALS: 'goals',
-//   TICKETS: 'tickets',
-//   CONTRIBUTIONS: 'contributions',
-//   RECURRING_CONTRIBUTIONS: 'recurring-contributions',
-//   CONTRIBUTE: 'contribute',
-//   UPDATES: 'updates',
-//   PARTICIPANTS: 'participants',
-//   LOCATION: 'location',
-//   BUDGET: 'budget',
-//   CONTRIBUTORS: 'contributors',
-//   CONVERSATIONS: 'conversations',
-//   TRANSACTIONS: 'transactions',
-//   CONNECT: 'connect',
-//   ABOUT: 'about',
-//   EVENTS: 'events',
-//   PROJECTS: 'projects',
-// };
-
 export const Sections = {
   // 1. CONTRIBUTE
   CONTRIBUTE: 'contribute',
@@ -48,7 +26,9 @@ export const Sections = {
   TRANSACTIONS: 'transactions',
   BUDGET: 'budget',
   USE_EXPENSES: 'expenses',
-  GOALS: 'goals', // COLLECTIVE_GOALS
+  GOALS: 'goals', // legacy, will turn into COLLECTIVE_GOALS
+  COLLECTIVE_GOALS: 'goals', // COLLECTIVE_GOALS
+  TOP_FINANCIAL_CONTRIBUTORS: 'top-contributors',
   PARTICIPANTS: 'participants',
   ALL_FINANCIAL_CONTRIBUTORS: 'contributors',
   CONTRIBUTORS: 'contributors', // legacy, will turn into ALL_FINANCIAL_CONTRIBUTORS

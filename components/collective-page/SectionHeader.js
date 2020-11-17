@@ -31,10 +31,13 @@ const TypeIllustration = styled.img.attrs({ alt: '' })`
 `;
 
 const illustrations = {
-  budget: budgetSectionHeaderIcon,
-  connect: connectSectionHeaderIcon,
   contribute: contributeSectionHeaderIcon,
+  contributions: contributeSectionHeaderIcon,
   events: eventsSectionHeaderIcon,
+  budget: budgetSectionHeaderIcon,
+  transactions: budgetSectionHeaderIcon,
+  connect: connectSectionHeaderIcon,
+  //about: aboutSectionHeaderIcon,
 };
 
 /**
@@ -52,9 +55,11 @@ const SectionHeader = ({ section, subtitle, info }) => {
           </Flex>
           <Flex alignItems="center" mr={3}>
             <SectionTitle mr={2}>{i18nCollectivePageSection(intl, section)}</SectionTitle>
-            <StyledTooltip content={() => info}>
-              <Info size={18} color="#76777A" />
-            </StyledTooltip>
+            {info && (
+              <StyledTooltip content={() => info}>
+                <Info size={18} color="#76777A" />
+              </StyledTooltip>
+            )}
           </Flex>
           <StyledHr flex="1" borderStyle="solid" borderColor="black.300" />
         </Flex>

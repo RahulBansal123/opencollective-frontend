@@ -20,6 +20,7 @@ import { fadeIn } from '../../StyledKeyframes';
 import StyledMembershipCard from '../../StyledMembershipCard';
 import { H3 } from '../../Text';
 import ContainerSectionContent from '../ContainerSectionContent';
+import SectionHeader from '../SectionHeader';
 import SectionTitle from '../SectionTitle';
 
 const FILTERS = {
@@ -207,7 +208,7 @@ class SectionContributions extends React.PureComponent {
   };
 
   render() {
-    const { collective, data, intl } = this.props;
+    const { collective, data, intl, section } = this.props;
     const { nbMemberships, selectedFilter } = this.state;
 
     if (data.loading) {
@@ -239,9 +240,15 @@ class SectionContributions extends React.PureComponent {
         {memberOf.length > 0 && (
           <React.Fragment>
             <ContainerSectionContent>
-              <SectionTitle data-cy="section-contributions-title" textAlign="left" mb={1}>
-                <FormattedMessage id="Contributions" defaultMessage="Contributions" />
-              </SectionTitle>
+              <SectionHeader
+                section={section}
+                subtitle={
+                  <FormattedMessage
+                    id="CollectivePage.SectionContributions.Subtitle"
+                    defaultMessage="How we are supporting other Collectives."
+                  />
+                }
+              />
               {data.Collective.stats.collectives.hosted > 0 && (
                 <H3 fontSize="20px" fontWeight="500" color="black.600">
                   <FormattedMessage
