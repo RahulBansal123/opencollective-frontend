@@ -211,7 +211,6 @@ class CollectivePage extends Component {
         return (
           <SectionContributions
             collective={this.props.collective}
-            slug={this.props.collective.slug}
             LoggedInUser={this.props.LoggedInUser}
             section={section}
           />
@@ -222,6 +221,7 @@ class CollectivePage extends Component {
             collective={this.props.collective}
             isAdmin={this.props.isAdmin}
             isRoot={this.props.isRoot}
+            section={section}
           />
         );
       case Sections.TICKETS:

@@ -63,11 +63,13 @@ const SectionHeader = ({ section, subtitle, info }) => {
           </Flex>
           <StyledHr flex="1" borderStyle="solid" borderColor="black.300" />
         </Flex>
-        <Flex mb={4} justifyContent="space-between" alignItems="center" flexWrap="wrap">
-          <P color="black.700" my={2} mr={2} css={{ flex: '1 0 50%', maxWidth: 780 }}>
-            {subtitle}
-          </P>
-        </Flex>
+        {subtitle && (
+          <Flex mb={4} justifyContent="space-between" alignItems="center" flexWrap="wrap">
+            <P color="black.700" my={2} mr={2} css={{ flex: '1 0 50%', maxWidth: 780 }}>
+              {subtitle}
+            </P>
+          </Flex>
+        )}
       </Box>
     </ContainerWithMaxWidth>
   );

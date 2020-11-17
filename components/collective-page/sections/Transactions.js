@@ -17,6 +17,7 @@ import StyledFilters from '../../StyledFilters';
 import { transactionsQueryCollectionFragment } from '../../transactions/graphql/fragments';
 import TransactionsList from '../../transactions/TransactionsList';
 import ContainerSectionContent from '../ContainerSectionContent';
+import SectionHeader from '../SectionHeader';
 import SectionTitle from '../SectionTitle';
 
 const NB_DISPLAYED = 10;
@@ -79,9 +80,7 @@ const SectionTransactions = props => {
   return (
     <Box py={5}>
       <ContainerSectionContent>
-        <SectionTitle data-cy="section-transactions-title" mb={4} textAlign="left">
-          <FormattedMessage id="SectionTransactions.Title" defaultMessage="Transactions" />
-        </SectionTitle>
+        <SectionHeader section={props.section} />
         {collectiveHasNoTransactions && (
           <MessageBox type="info" withIcon>
             <FormattedMessage id="SectionTransactions.Empty" defaultMessage="No transaction yet." />

@@ -8,6 +8,8 @@ import styled from 'styled-components';
 
 import { CollectiveType } from '../../../lib/constants/collectives';
 import roles from '../../../lib/constants/roles';
+import { getEnvVar } from '../../../lib/env-utils';
+import { parseToBoolean } from '../../../lib/utils';
 
 import { Dimensions } from '../_constants';
 import Container from '../../Container';
@@ -22,6 +24,8 @@ import { H3 } from '../../Text';
 import ContainerSectionContent from '../ContainerSectionContent';
 import SectionHeader from '../SectionHeader';
 import SectionTitle from '../SectionTitle';
+
+import SectionRecurringContributions from './RecurringContributions';
 
 const FILTERS = {
   ALL: 'ALL',
@@ -208,7 +212,7 @@ class SectionContributions extends React.PureComponent {
   };
 
   render() {
-    const { collective, data, intl, section } = this.props;
+    const { collective, data, intl, section, LoggedInUser } = this.props;
     const { nbMemberships, selectedFilter } = this.state;
 
     if (data.loading) {
@@ -300,6 +304,10 @@ class SectionContributions extends React.PureComponent {
               </Flex>
             )}
           </React.Fragment>
+        )}
+
+        {parseToBoolean(getEnvVar('NEW_COLLECTIVE_NAVBAR')) && (
+          <SectionRecurringContributions slug={collective.slug} LoggedInUser={LoggedInUser} />
         )}
 
         {connectedCollectives.length > 0 && (
